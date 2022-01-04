@@ -1,0 +1,69 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<div>
+<input type="text" id="appinput" placeholder="Seat Arrangement Size">
+<input type="text" id="totalPassengers" placeholder="Total Passengers">
+<input type="button" id="appinputsubmit" value="submit">
+</div>
+<div><label style="font-size: 13px;font-family: sans-serif;color: gray;">Enter Seat Arrangement Size like in Example : &#91;&#91;3,2&#93;,&#91;4,3&#93;,&#91;2,3&#93;,&#91;3,4&#93;&#93; </label></div>
+
+<div id="output" style="display: flex;"></div>
+
+<script>
+$("#appinput,#totalPassengers").on('keypress',function(e) {
+    if(e.which == 13) {
+    	$("#appinputsubmit").click();
+    }
+});
+$("#appinputsubmit").click(function(){
+	$('table').remove();
+	myData = $("#appinput").val();
+	$.ajax({
+	    url: "/allocate"+"/"+totalPassengers.value,
+	    data: myData,
+	    type: "POST",
+	    dataType:"json",
+	    contentType:'application/json'   
+	    ,success : function(res){
+	        res.forEach(function(a,b){
+	            $("#output").append("<table id=\"t"+b+"\"></table>");
+	            a.forEach(function(c,d){
+	                $("#t"+b).append("<tr id=\"tr"+b+""+d+"\"></tr>");
+	                c.forEach(function(e,f){
+	                    $("#tr"+b+""+d).append("<td>"+(e!=null ? e : "")+"</td>");
+	                });
+	            })
+	        })
+	    }
+	    ,error : function(a,b,c){
+	        console.log("err!", a, b, c);
+	    }
+	});
+})
+</script>
+<style>
+table {
+    margin-block-end: auto;
+    border: 1px solid;
+}
+table, th, td {
+    border: 1px solid;
+    border-collapse: collapse;
+    padding: 10px;
+}
+table {
+    margin-right: 18px;
+}
+table:first-of-type tr td:first-of-type,table:last-of-type tr td:last-of-type {
+    background: aquamarine;
+}
+table tr td:first-of-type,table tr td:last-of-type {
+    background: aqua;
+}
+td {
+    background: cornflowerblue;
+}
+body {
+	text-align: center;
+}
+</style>

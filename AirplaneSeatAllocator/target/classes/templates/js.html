@@ -1,0 +1,88 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<div>
+<input type="text" id="appinput" placeholder="Seat Arrangement Size">
+<input type="text" id="totalPassengers" placeholder="Total Passengers">
+<input type="button" id="appinputsubmit" value="submit">
+</div>
+<div><label style="font-size: 13px;font-family: sans-serif;color: gray;">Enter Seat Arrangement Size like in Example : &#91;&#91;3,2&#93;,&#91;4,3&#93;,&#91;2,3&#93;,&#91;3,4&#93;&#93; </label></div>
+
+<div id="output" style="display: flex;"></div>
+
+<script>
+const AISLE = 1,WIN = 2,MID = 3;
+function getArrangements(seatGroups,totalPassengers){
+    var seatTypes = [AISLE,WIN,MID];
+    var cP = 1,curRow=-1,tP=totalPassengers;
+    var groups = seatGroups;
+    var max = JSON.parse(groups).sort((a,b)=> b[1]-a[1])[0][1];
+    groups = JSON.parse(groups);
+    var gm = [];
+    //Seat Allocation for each seat type at a time
+    for(seatType of seatTypes){
+        for(var group=0;(curRow<max && group<groups.length);++group==groups.length ? group=0:group){
+            var cg = groups[group]; //Current Switched Group
+            gm[group] = gm[group] || [];
+            if(group==0) curRow++;
+            for(var col=0;col<cg[0] && curRow<cg[1];col++){
+                    gm[group][curRow] = gm[group][curRow] || [];
+                    if(getSeatType(groups.length,group,cg[0],col)==seatType && cP<=tP) gm[group][curRow][col] = cP++;
+                    else if(gm[group][curRow][col]==undefined) gm[group][curRow][col] = null;
+            }
+        }
+        curRow=-1;
+    }
+    return gm;
+}
+function getSeatType(groupsize,group,colsize,curcol){
+    if((group==0&&curcol==0) || (group==groupsize-1&&curcol==colsize-1)) return WIN;
+    else if(curcol==0 || curcol==colsize-1) return AISLE;
+    else return MID
+}
+$("#appinput,#totalPassengers").on('keypress',function(e) {
+    if(e.which == 13) {
+    	$("#appinputsubmit").click();
+    }
+});
+$("#appinputsubmit").click(function(){
+	$('table').remove();
+	myData = $("#appinput").val();
+	res = getArrangements(myData,totalPassengers.value);
+	res.forEach(function(a,b){
+        $("#output").append("<table id=\"t"+b+"\"></table>");
+        a.forEach(function(c,d){
+            $("#t"+b).append("<tr id=\"tr"+b+""+d+"\"></tr>");
+            c.forEach(function(e,f){
+                $("#tr"+b+""+d).append("<td>"+((e!=null && e!=undefined) ? e : "")+"</td>");
+            });
+        })
+    })
+})
+
+</script>
+<style>
+table {
+    margin-block-end: auto;
+    border: 1px solid;
+}
+table, th, td {
+    border: 1px solid;
+    border-collapse: collapse;
+    padding: 10px;
+}
+table {
+    margin-right: 18px;
+}
+table:first-of-type tr td:first-of-type,table:last-of-type tr td:last-of-type {
+    background: aquamarine;
+}
+table tr td:first-of-type,table tr td:last-of-type {
+    background: aqua;
+}
+td {
+    background: cornflowerblue;
+}
+body {
+	text-align: center;
+}
+</style>

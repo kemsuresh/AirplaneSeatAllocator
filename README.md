@@ -7,5 +7,5 @@ starting	from	the	left	to	the	right
 seats	(any	order	in	center	seats)
 
 # Run the application
-1. run command - mvnw spring-boot:run.
+1. run in command line - mvnw spring-boot:run or import in eclipse and run as spring boot app.
 2. open localhost:8080 in browser

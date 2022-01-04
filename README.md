@@ -1,5 +1,5 @@
 # AirplaneSeatAllocator
-Airplane Seat Allocator Spring Boot based Application that helps seating passengers on following input rules.
+Airplane Seat Allocator is a Spring Boot based Application that helps seating passengers on following input rules.
 # Rules	for	seating	
 • Always	seat	passengers	starting	from	the	front	row	to	back,	
 starting	from	the	left	to	the	right	
